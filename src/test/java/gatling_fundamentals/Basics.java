@@ -23,7 +23,7 @@ public class Basics extends Simulation {
 
     // 3. Load Simulation
     {
-        setUp(scenarioBuilder.injectOpen(atOnceUsers(1)))
+        setUp(scenarioBuilder.injectOpen(atOnceUsers(1000)))
                         .protocols(httpProtocol);
 
     }
