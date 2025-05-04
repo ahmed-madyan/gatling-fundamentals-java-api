@@ -25,6 +25,5 @@ public class Basics extends Simulation {
     {
         setUp(scenarioBuilder.injectOpen(atOnceUsers(1000)))
                         .protocols(httpProtocol);
-
     }
 }
