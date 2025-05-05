@@ -1,0 +1,25 @@
+trigger:
+  branches:
+    include:
+      - main  # or your default branch
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  MAVEN_OPTS: "-Xmx2g"
+
+steps:
+  - task: Maven@3
+    inputs:
+      mavenPomFile: 'pom.xml'
+      goals: 'clean test-compile gatling:test'
+      options: '-Dgatling.simulationClass=gatling_fundamentals.Basics'
+    displayName: 'Run Gatling Load Test'
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: 'target/gatling'
+      artifact: 'gatling-report'
+      publishLocation: 'pipeline'
+    displayName: 'Publish Gatling HTML Report'
