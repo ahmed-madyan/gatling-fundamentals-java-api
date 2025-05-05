@@ -59,7 +59,15 @@
                         <jvmArg>--add-opens=java.base/java.lang=ALL-UNNAMED</jvmArg>
                         <jvmArg>--enable-native-access=ALL-UNNAMED</jvmArg>
                     </jvmArgs>
+                    <resultsFolder>${project.basedir}/build/reports</resultsFolder>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
