@@ -27,21 +27,18 @@
             <groupId>io.gatling.highcharts</groupId>
             <artifactId>gatling-charts-highcharts</artifactId>
             <version>${gatling.version}</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>io.gatling</groupId>
             <artifactId>gatling-core-java</artifactId>
             <version>${gatling.version}</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
