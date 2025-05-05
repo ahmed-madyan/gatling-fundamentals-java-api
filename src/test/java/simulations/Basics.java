@@ -1,4 +1,4 @@
-package gatling_fundamentals;
+package simulations;
 
 import gatling.enums.HttpMethod;
 import gatling.enums.BasePath;
