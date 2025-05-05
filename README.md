@@ -15,13 +15,22 @@ gatling/
 │   ├── PopulationFactory.java
 │   ├── ScenarioFactory.java
 │   └── SimulationFactory.java
+src/test/java/simulations/
+└── YourSimulationClass.java
 ```
 
 ---
 
-## 🚧 Dependencies
+## ✅ Requirements
 
-Ensure you have the following in your `build.gradle` or `pom.xml`:
+- Java 11+
+- Gradle or Maven
+- Gatling 3.13.5
+- `java.util.logging` (configured by default)
+
+---
+
+## 🚧 Dependencies
 
 ### **Gradle**
 ```groovy
@@ -50,82 +59,113 @@ dependencies {
 
 ---
 
-## 🧱 Key Components
-
-| Class                   | Purpose                                                                 |
-|------------------------|-------------------------------------------------------------------------|
-| `HttpProtocolFactory`  | Creates and configures HTTP protocol with base URL + headers            |
-| `LoadProfileFactory`   | Generates open injection steps (e.g., spike, ramp, stress)              |
-| `ScenarioFactory`      | Dynamically builds scenarios with exec steps and paths                  |
-| `PopulationFactory`    | Validates and wraps `PopulationBuilder` for `setUp()`                   |
-| `SimulationFactory`    | Combines scenario + protocol + injection model to create simulations    |
-
----
-
-## 🚀 Getting Started
+## 🧪 Sample Simulation
 
 ```java
-// Example: Create a scenario and run with spike load
+package simulations;
 
-ScenarioBuilder scenario = new ScenarioFactory("Simple GET")
-    .request(HttpMethod.GET, BasePath.HEALTH_CHECK)
-    .build();
+import io.gatling.javaapi.core.Simulation;
+import io.gatling.javaapi.core.PopulationBuilder;
+import gatling.utils.*;
 
-HttpProtocolBuilder protocol = new HttpProtocolFactory(BaseURI.LOCALHOST)
-    .withHeader("Authorization", "Bearer token")
-    .build();
+import static io.gatling.javaapi.core.CoreDsl.*;
+import static gatling.enums.BasePath.HEALTH_CHECK;
+import static gatling.enums.HttpMethod.GET;
+import static gatling.enums.BaseURI.LOCALHOST;
 
-PopulationBuilder population = new SimulationFactory(scenario, protocol)
-    .injectOpen(LoadProfileFactory.spike(100))
-    .build();
+public class YourSimulationClass extends Simulation {
 
-setUp(PopulationFactory.with(population));
+    public YourSimulationClass() {
+        var scenario = new ScenarioFactory("Health Check")
+            .request(GET, HEALTH_CHECK)
+            .build();
+
+        var protocol = new HttpProtocolFactory(LOCALHOST)
+            .build();
+
+        PopulationBuilder population = new SimulationFactory(scenario, protocol)
+            .injectOpen(LoadProfileFactory.spike(50))
+            .build();
+
+        setUp(PopulationFactory.with(population));
+    }
+}
+```
+
+📁 Ensure the class is located at:
+
+```
+src/test/java/simulations/YourSimulationClass.java
 ```
 
 ---
 
-## ✅ Requirements
+## 🛠️ Running with Maven CLI
 
-- Java 11+
-- Gradle/Maven
-- Gatling 3.13.5
-- JDK logging or SLF4J compatible logger (already configured via `java.util.logging`)
+Use the following commands if you have Maven installed globally:
 
----
-
-## 🧪 Run Simulations
-
+### 💻 Linux / macOS / Windows Git Bash
 ```bash
-./gradlew gatlingRun
-# or with Maven
+mvn gatling:test -Dgatling.simulationClass=simulations.YourSimulationClass
 mvn gatling:test
+mvn clean install -DskipTests gatling:test
 ```
 
 ---
 
-## 📈 Output
+## 🧰 Running with Maven Wrapper (`mvnw`, `mvnw.cmd`)
 
-After execution, reports will be located under:
+If your project includes the Maven Wrapper:
+
+### 💻 On Linux / macOS (bash/zsh)
+```bash
+./mvnw gatling:test -Dgatling.simulationClass=simulations.YourSimulationClass
+```
+
+### 🪟 On Windows (CMD & PowerShell)
+```cmd
+.\mvnw.cmd "gatling:test" "-Dgatling.simulationClass=simulations.YourSimulationClass"
+```
+
+> ✅ This is the only format that works reliably in PowerShell.
+> The Maven Wrapper ensures consistent Maven versions across all developers and CI environments.
+
+---
+
+## 📈 Reports
+
+After execution, HTML reports are available in:
 
 ```
 build/reports/gatling/
 ```
 
-Open `index.html` inside the scenario folder to view the interactive report.
+Open the `index.html` inside the latest simulation folder to view metrics.
 
 ---
 
-## 🤝 Contributions
+## 🤝 Contributing
 
-Pull requests welcome. Feel free to suggest extensions like:
-- Feeder support
-- Closed injection enhancements
-- Custom metrics integration
+Pull requests welcome! Useful extensions include:
+
+- Data feeder integration
+- Advanced injection step profiles
+- CI pipeline templates
+- Performance threshold assertions
+
+---
+
+## 🛡️ License
+
+MIT License © 2025
 
 ---
 
-## 💬 Questions?
+## 💬 Need Help?
 
-Open an issue or ping in the Gatling community forums.
+Open an issue or visit the [Gatling community forums](https://community.gatling.io).
 
 ---
+
+Built for speed. Tuned for control. 📊  
+[Click here to try our newest writing GPT!](https://chatgpt.com/g/g-hjONEUO7J-writing-pro)
