@@ -34,14 +34,14 @@ jobs:
           echo "Showing files inside ${project.basedir}/reports"
           ls -R target/gatling || echo "No files found"
 #
-#      - name: Compress Gatling Report
-#        run: |
-#          REPORT_DIR=$(find target/gatling -maxdepth 1 -type d -name '*AuthDummyJSON*' | head -n 1)
-#          echo "Zipping $REPORT_DIR"
-#          zip -r gatling-report.zip "$REPORT_DIR"
-#
-#      - name: Upload Gatling Report Artifact
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: gatling-report
-#          path: gatling-report.zip
+      - name: Compress Gatling Report
+        run: |
+          REPORT_DIR=$(find target/gatling -maxdepth 1 -type d -name '*AuthDummyJSON*' | head -n 1)
+          echo "Zipping $REPORT_DIR"
+          zip -r gatling-report.zip "$REPORT_DIR"
+
+      - name: Upload Gatling Report Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: gatling-report
+          path: gatling-report.zip
