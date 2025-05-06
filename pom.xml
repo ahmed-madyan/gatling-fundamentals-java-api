@@ -59,7 +59,7 @@
                         <jvmArg>--add-opens=java.base/java.lang=ALL-UNNAMED</jvmArg>
                         <jvmArg>--enable-native-access=ALL-UNNAMED</jvmArg>
                     </jvmArgs>
-                    <resultsFolder>${project.basedir}/build/reports</resultsFolder>
+                    <resultsFolder>${project.basedir}/reports</resultsFolder>
                 </configuration>
                 <executions>
                     <execution>
