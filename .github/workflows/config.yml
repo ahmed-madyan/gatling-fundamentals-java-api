@@ -1,54 +1,4 @@
-#name: Gatling Load Test
-#
-#on:
-#  push:
-#    branches:
-#      - main  # Change to 'master' if that’s your default branch
-#
-#jobs:
-#  gatling:
-#    runs-on: ubuntu-latest
-#
-#    env:
-#      MAVEN_OPTS: "-Xmx2g"
-#
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v3
-#
-#      - name: Set up JDK 17
-#        uses: actions/setup-java@v3
-#        with:
-#          distribution: 'temurin'
-#          java-version: '17'
-#
-#      - name: Run Gatling Load Test
-#        run: |
-#          ./mvnw gatling:test -Dgatling.simulationClass=simulations.AuthDummyJSON
-#
-#      - name: Compress Gatling Report
-#        if: always()
-#        run: zip -r gatling-report.zip target/gatling
-#
-#      - name: Upload Gatling Report Artifact
-#        if: always()
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: gatling-report
-#          path: gatling-report.zip
-
-
-
-
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
-
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-name: Java CI with Maven
+name: Gatling Load Test
 
 on:
   push:
@@ -57,21 +7,41 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-
+  gatling:
     runs-on: ubuntu-latest
 
+    env:
+      MAVEN_OPTS: "-Xmx2g"
+
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: maven
-    - name: Build with Maven
-#      run: mvn -B package --file pom.xml
-      run: ./mvnw gatling:test -Dgatling.simulationClass=simulations.AuthDummyJSON
-    # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
-#    - name: Update dependency graph
-#      uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Run Gatling Simulation
+        run: |
+          chmod +x ./mvnw
+          ./mvnw gatling:test -Dgatling.simulationClass=simulations.AuthDummyJSON
+
+      - name: Debug - List Gatling Output
+        run: |
+          echo "Showing files inside target/gatling"
+          ls -R target/gatling || echo "No files found"
+
+      - name: Compress Gatling Report
+        run: |
+          REPORT_DIR=$(find target/gatling -maxdepth 1 -type d -name '*AuthDummyJSON*' | head -n 1)
+          echo "Zipping $REPORT_DIR"
+          zip -r gatling-report.zip "$REPORT_DIR"
+
+      - name: Upload Gatling Report Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: gatling-report
+          path: gatling-report.zip
