@@ -3,7 +3,7 @@ name: Gatling Load Test
 on:
   push:
     branches:
-      - main  # or master, if that's your default branch
+      - main  # Change to 'master' if that’s your default branch
 
 jobs:
   gatling:
@@ -26,9 +26,13 @@ jobs:
         run: |
           ./mvnw gatling:test -Dgatling.simulationClass=simulations.AuthDummyJSON
 
-      - name: Upload Gatling Report
+      - name: Compress Gatling Report
+        if: always()
+        run: zip -r gatling-report.zip target/gatling
+
+      - name: Upload Gatling Report Artifact
         if: always()
         uses: actions/upload-artifact@v2
         with:
           name: gatling-report
-          path: target/gatling
+          path: gatling-report.zip
