@@ -3,7 +3,7 @@ name: Gatling Load Test
 on:
   push:
     branches:
-      - main  # Change to main if that’s your default branch
+      - main  # or master, if that's your default branch
 
 jobs:
   gatling:
@@ -24,8 +24,7 @@ jobs:
 
       - name: Run Gatling Load Test
         run: |
-          .\mvnw.cmd "gatling:test" "-Dgatling.simulationClass=simulations.AuthDummyJSON"
-#          mvn clean test-compile gatling:test -Dgatling.simulationClass=gatling_fundamentals.Basics
+          ./mvnw gatling:test -Dgatling.simulationClass=simulations.AuthDummyJSON
 
       - name: Upload Gatling Report
         if: always()
