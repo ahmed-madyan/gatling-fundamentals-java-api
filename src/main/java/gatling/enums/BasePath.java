@@ -6,7 +6,8 @@ import lombok.Getter;
 public enum BasePath {
     LIST_VIDEO_GAMES("/api/videogame"),
     USER("/user"),
-    ADMIN("/admin");
+    ADMIN("/admin"),
+    RESOURCES("/data/api/resource");
 
     private final String path;
 
