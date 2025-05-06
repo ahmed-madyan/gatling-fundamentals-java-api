@@ -8,7 +8,8 @@ import java.util.Arrays;
 
 public enum BaseURI {
     VIDEO_GAME("https://www.videogamedb.uk:443"),
-    PROD("https://api.prod.to-zi.com");
+    PROD("https://api.prod.to-zi.com"),
+    DUMMY_JSON("https://dummyjson.com");
 
     @Getter
     private final URI baseURI;

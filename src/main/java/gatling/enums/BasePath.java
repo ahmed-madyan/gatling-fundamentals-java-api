@@ -7,7 +7,9 @@ public enum BasePath {
     LIST_VIDEO_GAMES("/api/videogame"),
     USER("/user"),
     ADMIN("/admin"),
-    RESOURCES("/data/api/resource");
+    RESOURCES("/data/api/resource"),
+    DUMMY_LOGIN("/auth/login"),
+    DUMMY_USER("/auth/me");
 
     private final String path;
 
