@@ -77,11 +77,11 @@ public class AuthDummyJSON extends Simulation {
     // Configures and launches the Gatling simulation using the prepared scenario and load profile.
     {
         try {
-            LOGGER.info("🚀 Executing simulation setup for: Auth Workflow");
+            LOGGER.info("Executing simulation setup for: Auth Workflow");
             setUp(PopulationFactory.with(population));
-            LOGGER.info("✅ Simulation setup completed successfully.");
+            LOGGER.info("Simulation setup completed successfully.");
         } catch (Exception e) {
-            LOGGER.severe("❌ Simulation setup failed: " + e.getMessage());
+            LOGGER.severe("Simulation setup failed: " + e.getMessage());
             throw e;
         }
     }

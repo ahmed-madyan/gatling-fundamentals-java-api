@@ -52,11 +52,11 @@ public class Basics extends Simulation {
     // Executes the simulation using the validated population builder.
     {
         try {
-            LOGGER.info("🚀 Executing simulation setup for: Get Games");
+            LOGGER.info("Executing simulation setup for: Get Games");
             setUp(PopulationFactory.with(population));
-            LOGGER.info("✅ Simulation setup completed successfully.");
+            LOGGER.info("Simulation setup completed successfully.");
         } catch (Exception e) {
-            LOGGER.severe("❌ Simulation setup failed: " + e.getMessage());
+            LOGGER.severe("Simulation setup failed: " + e.getMessage());
             throw e;
         }
     }
