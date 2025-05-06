@@ -41,7 +41,7 @@ jobs:
           zip -r gatling-report.zip "$REPORT_DIR"
 
       - name: Upload Gatling Report Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: gatling-report
           path: gatling-report.zip
