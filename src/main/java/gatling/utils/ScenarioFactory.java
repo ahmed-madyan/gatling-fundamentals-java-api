@@ -1,9 +1,7 @@
 package gatling.utils;
 
-import gatling.enums.HttpMethod;
 import io.gatling.javaapi.core.ChainBuilder;
 import io.gatling.javaapi.core.ScenarioBuilder;
-import io.gatling.javaapi.http.HttpRequestActionBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +9,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
-import static io.gatling.javaapi.http.HttpDsl.http;
 
 public class ScenarioFactory {
 
