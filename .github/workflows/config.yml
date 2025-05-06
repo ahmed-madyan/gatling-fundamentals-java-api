@@ -31,7 +31,7 @@ jobs:
 #
       - name: Debug - List Gatling Output
         run: |
-          echo "Showing files inside target/gatling"
+          echo "Showing files inside ${project.basedir}/reports"
           ls -R target/gatling || echo "No files found"
 #
 #      - name: Compress Gatling Report
