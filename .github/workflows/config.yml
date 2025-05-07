@@ -29,19 +29,18 @@ jobs:
           chmod +x ./mvnw
           ./mvnw gatling:test -Dgatling.simulationClass=simulations.AuthDummyJSON
 
-#      - name: Debug - List Gatling Output
-#        run: |
-#          echo "Showing files inside ${project.basedir}/reports"
-#          ls -R target/gatling || echo "No files found"
-#
-#      - name: Compress Gatling Report
-#        run: |
-#          REPORT_DIR=$(find target/gatling -maxdepth 1 -type d -name '*AuthDummyJSON*' | head -n 1)
-#          echo "Zipping $REPORT_DIR"
-#          zip -r gatling-report.zip "$REPORT_DIR"
-#
-#      - name: Upload Gatling Report Artifact
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: gatling-report
-#          path: gatling-report.zip
+      - name: Copy Latest Gatling Report
+        run: |
+          mkdir -p report-to-push
+          LATEST=$(ls -td target/gatling/*/ | head -n1)
+          echo "Latest report: $LATEST"
+          cp -r "$LATEST"/* report-to-push/
+
+      - name: Push Report to Repository
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "🔁 Auto-publish Gatling report"
+          branch: main
+          file_pattern: report-to-push/**
+          commit_user_name: github-actions
+          commit_user_email: github-actions@github.com
