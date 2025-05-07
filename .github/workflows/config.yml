@@ -44,8 +44,10 @@ jobs:
           echo "✅ Found report folder: $REPORT_DIR"
           TIMESTAMP=$(date "+%Y-%m-%d_%H-%M-%S")
           ZIP_NAME="gatling-report-${TIMESTAMP}.zip"
-          zip -r "$ZIP_NAME" "$REPORT_DIR"
           echo "ZIP_NAME=$ZIP_NAME" >> $GITHUB_ENV
+          mkdir -p publish
+          cp -r "$REPORT_DIR"/* publish/
+          zip -r "$ZIP_NAME" "$REPORT_DIR"
 
       - name: Confirm Zip File Exists
         run: |
@@ -62,7 +64,6 @@ jobs:
         with:
           name: ${{ env.ZIP_NAME }}
           path: ${{ env.ZIP_NAME }}
-
 
       - name: Deploy to GitHub Pages
         if: always()
