@@ -34,7 +34,7 @@ jobs:
           echo "Listing contents of ./reports"
           ls -R reports || echo "❌ reports directory does not exist"
 
-      - name: Compress Gatling Report
+      - name: Compress Gatling Report with Timestamp
         run: |
           REPORT_DIR=$(find reports -maxdepth 1 -type d -name 'authdummyjson-*' | sort | tail -n 1)
           if [ -z "$REPORT_DIR" ]; then
@@ -42,20 +42,32 @@ jobs:
             exit 1
           fi
           echo "✅ Found report folder: $REPORT_DIR"
-          zip -r gatling-report.zip "$REPORT_DIR"
+          TIMESTAMP=$(date "+%Y-%m-%d_%H-%M-%S")
+          ZIP_NAME="gatling-report-${TIMESTAMP}.zip"
+          zip -r "$ZIP_NAME" "$REPORT_DIR"
+          echo "ZIP_NAME=$ZIP_NAME" >> $GITHUB_ENV
 
       - name: Confirm Zip File Exists
         run: |
-          if [ ! -f "gatling-report.zip" ]; then
+          if [ ! -f "${{ env.ZIP_NAME }}" ]; then
             echo "❌ Zip file was not created"
             exit 1
           fi
-          echo "✅ gatling-report.zip created"
-          ls -lh gatling-report.zip
+          echo "✅ ${{ env.ZIP_NAME }} created"
+          ls -lh "${{ env.ZIP_NAME }}"
 
       - name: Upload Gatling Report Artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: gatling-report
-          path: gatling-report.zip
+          name: ${{ env.ZIP_NAME }}
+          path: ${{ env.ZIP_NAME }}
+
+
+      - name: Deploy to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4.0.0
+        with:
+          github_token: ${{ secrets.GATLING_API_TOKEN }}
+          publish_dir: ./publish
+          publish_branch: gh-pages
