@@ -78,7 +78,6 @@ public class AuthDummyJSON extends Simulation {
     {
         try {
             LOGGER.info("Executing simulation setup for: Auth Workflow");
-            setUp(PopulationFactory.with(population));
             LOGGER.info("Simulation setup completed successfully.");
         } catch (Exception e) {
             LOGGER.severe("Simulation setup failed: " + e.getMessage());

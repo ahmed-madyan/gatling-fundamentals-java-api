@@ -43,7 +43,7 @@ public class Basics extends Simulation {
     // Configures the user load: an initial spike followed by a ramp-up phase.
     private final PopulationBuilder population = new SimulationFactory(gameList, httpProtocolFactory)
             .injectOpen(
-                    LoadProfileFactory.spike(10),        // Instant spike: 10 users
+                    LoadProfileFactory.spike(1000),        // Instant spike: 10 users
                     LoadProfileFactory.rampUp(20, 10)    // Gradually ramp up 20 users over 10 seconds
             )
             .build();
