@@ -15,10 +15,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
@@ -29,24 +29,29 @@ jobs:
           chmod +x ./mvnw
           ./mvnw clean test-compile gatling:test -Dgatling.simulationClass=simulations.AuthDummyJSON
 
-      - name: Find Gatling Report and copy to publish/
+      - name: Debug - List contents of reports/
+        run: |
+          echo "Listing contents of ./reports"
+          ls -R reports || echo "❌ reports directory does not exist"
+
+      - name: Compress Gatling Report
         run: |
           REPORT_DIR=$(find reports -maxdepth 1 -type d -name 'authdummyjson-*' | sort | tail -n 1)
           if [ -z "$REPORT_DIR" ]; then
-            echo "❌ No Gatling report found."
+            echo "❌ No Gatling report folder found in ./reports"
             exit 1
           fi
-          echo "✅ Found report: $REPORT_DIR"
-          mkdir -p publish
-          cp -r "$REPORT_DIR"/* publish/
-          cp -r "$REPORT_DIR"/* artifact/   # for zip
+          echo "✅ Found report folder: $REPORT_DIR"
+          zip -r gatling-report.zip "$REPORT_DIR"
 
-      - name: Zip clean report
+      - name: Confirm Zip File Exists
         run: |
-          mkdir -p artifact
-          cp -r publish/* artifact/
-          cd artifact
-          zip -r ../gatling-report.zip .
+          if [ ! -f "gatling-report.zip" ]; then
+            echo "❌ Zip file was not created"
+            exit 1
+          fi
+          echo "✅ gatling-report.zip created"
+          ls -lh gatling-report.zip
 
       - name: Upload Gatling Report Artifact
         if: always()
@@ -54,11 +59,3 @@ jobs:
         with:
           name: gatling-report
           path: gatling-report.zip
-
-#      - name: Deploy to GitHub Pages
-#        if: always()
-#        uses: peaceiris/actions-gh-pages@v4.0.0
-#        with:
-#          github_token: ${{ secrets.GATLING_API_TOKEN }}
-#          publish_dir: ./publish
-#          publish_branch: gh-pages
