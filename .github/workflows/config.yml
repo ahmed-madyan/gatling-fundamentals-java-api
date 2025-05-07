@@ -29,12 +29,17 @@ jobs:
           chmod +x ./mvnw
           ./mvnw gatling:test -Dgatling.simulationClass=simulations.AuthDummyJSON
 
-      - name: Copy Latest Gatling Report
+      - name: Debug - List Reports Output
+        run: |
+          echo "Contents of /reports:"
+          ls -R reports || echo "❌ No 'reports/' directory found."
+
+      - name: Copy Latest Gatling Report from /reports
         run: |
           set -e
-          REPORT_DIR=$(find reports/gatling -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1)
+          REPORT_DIR=$(find reports -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1)
           if [ -z "$REPORT_DIR" ]; then
-            echo "❌ No Gatling report directory found."
+            echo "❌ No Gatling report directory found in /reports"
             exit 1
           fi
           echo "✅ Found report at $REPORT_DIR"
@@ -44,7 +49,7 @@ jobs:
       - name: Commit Gatling Report to Repository
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "📊 Auto-publish Gatling report"
+          commit_message: "📊 Auto-publish Gatling report from /reports"
           branch: main
           file_pattern: report-to-push/**
           commit_user_name: github-actions
