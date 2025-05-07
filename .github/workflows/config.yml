@@ -55,10 +55,10 @@ jobs:
           name: gatling-report
           path: gatling-report.zip
 
-      - name: Deploy to GitHub Pages
-        if: always()
-        uses: peaceiris/actions-gh-pages@v4.0.0
-        with:
-          github_token: ${{ secrets.GATLING_API_TOKEN }}
-          publish_dir: ./publish
-          publish_branch: gh-pages
+#      - name: Deploy to GitHub Pages
+#        if: always()
+#        uses: peaceiris/actions-gh-pages@v4.0.0
+#        with:
+#          github_token: ${{ secrets.GATLING_API_TOKEN }}
+#          publish_dir: ./publish
+#          publish_branch: gh-pages
