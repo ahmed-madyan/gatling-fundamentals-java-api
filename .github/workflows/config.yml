@@ -34,7 +34,7 @@ jobs:
           echo "Listing contents of ./reports"
           ls -R reports || echo "❌ reports directory does not exist"
 
-      - name: Compress Gatling Report
+      - name: Compress Gatling Report (clean zip)
         run: |
           REPORT_DIR=$(find reports -maxdepth 1 -type d -name 'authdummyjson-*' | sort | tail -n 1)
           if [ -z "$REPORT_DIR" ]; then
@@ -42,7 +42,8 @@ jobs:
             exit 1
           fi
           echo "✅ Found report folder: $REPORT_DIR"
-          zip -r gatling-report.zip "$REPORT_DIR"
+          cd "$REPORT_DIR"
+          zip -r ../../../gatling-report.zip .
 
       - name: Confirm Zip File Exists
         run: |
@@ -60,10 +61,21 @@ jobs:
           name: gatling-report
           path: gatling-report.zip
 
+      - name: Prepare clean publish folder
+        run: |
+          mkdir -p publish
+          REPORT_DIR=$(find reports -maxdepth 1 -type d -name 'authdummyjson-*' | sort | tail -n 1)
+          if [ -z "$REPORT_DIR" ]; then
+            echo "❌ No report found for GitHub Pages."
+            exit 1
+          fi
+          echo "✅ Copying report from: $REPORT_DIR"
+          cp -r "$REPORT_DIR"/* publish/
+
       - name: Deploy to GitHub Pages
         if: always()
         uses: peaceiris/actions-gh-pages@v4.0.0
         with:
           github_token: ${{ secrets.GATLING_API_TOKEN }}
-          publish_dir: ./reports
+          publish_dir: ./publish
           publish_branch: gh-pages
