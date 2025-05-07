@@ -32,7 +32,7 @@ jobs:
       - name: Copy Latest Gatling Report
         run: |
           set -e
-          REPORT_DIR=$(find repors/gatling -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1)
+          REPORT_DIR=$(find reports/gatling -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1)
           if [ -z "$REPORT_DIR" ]; then
             echo "❌ No Gatling report directory found."
             exit 1
