@@ -30,25 +30,35 @@ jobs:
       - name: Run Gatling Simulation
         run: |
           chmod +x ./mvnw
-          ./mvnw gatling:test -Dgatling.simulationClass=simulations.AuthDummyJSON
+          ./mvnw clean test-compile gatling:test -Dgatling.simulationClass=simulations.AuthDummyJSON
 
-      - name: Copy Latest Gatling Report Preserving Folder
+      - name: Debug - List contents of reports/
         run: |
-          set -e
-          mkdir -p committed-reports
-          REPORT_DIR=$(find reports -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1)
+          echo "Listing contents of ./reports"
+          ls -R reports || echo "❌ reports directory does not exist"
+
+      - name: Compress Gatling Report
+        run: |
+          REPORT_DIR=$(find reports -maxdepth 1 -type d -name 'authdummyjson-*' | sort | tail -n 1)
           if [ -z "$REPORT_DIR" ]; then
-            echo "❌ No report found in /reports"
+            echo "❌ No Gatling report folder found in ./reports"
             exit 1
           fi
-          echo "✅ Found report: $REPORT_DIR"
-          BASENAME=$(basename "$REPORT_DIR")
-          cp -r "$REPORT_DIR" "committed-reports/$BASENAME"
+          echo "✅ Found report folder: $REPORT_DIR"
+          zip -r gatling-report.zip "$REPORT_DIR"
 
-      - name: Commit Full Report Folder to Main
+      - name: Confirm Zip File Exists
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git add committed-reports/** -f
-          git commit -m "📊 Add Gatling report: $BASENAME [CI]" || echo "Nothing to commit"
-          git push https://x-access-token:${{ secrets.GATLING_API_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
+          if [ ! -f "gatling-report.zip" ]; then
+            echo "❌ Zip file was not created"
+            exit 1
+          fi
+          echo "✅ gatling-report.zip created"
+          ls -lh gatling-report.zip
+
+      - name: Upload Gatling Report Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gatling-report
+          path: gatling-report.zip
