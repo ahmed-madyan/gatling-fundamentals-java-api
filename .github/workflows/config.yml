@@ -31,15 +31,20 @@ jobs:
 
       - name: Copy Latest Gatling Report
         run: |
+          set -e
+          REPORT_DIR=$(find target/gatling -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1)
+          if [ -z "$REPORT_DIR" ]; then
+            echo "❌ No Gatling report directory found."
+            exit 1
+          fi
+          echo "✅ Found report at $REPORT_DIR"
           mkdir -p report-to-push
-          LATEST=$(ls -td target/gatling/*/ | head -n1)
-          echo "Latest report: $LATEST"
-          cp -r "$LATEST"/* report-to-push/
+          cp -r "$REPORT_DIR"/* report-to-push/
 
-      - name: Push Report to Repository
+      - name: Commit Gatling Report to Repository
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "🔁 Auto-publish Gatling report"
+          commit_message: "📊 Auto-publish Gatling report"
           branch: main
           file_pattern: report-to-push/**
           commit_user_name: github-actions
