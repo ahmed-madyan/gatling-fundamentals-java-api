@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: write
+
 jobs:
   gatling:
     runs-on: ubuntu-latest
@@ -29,27 +32,23 @@ jobs:
           chmod +x ./mvnw
           ./mvnw gatling:test -Dgatling.simulationClass=simulations.AuthDummyJSON
 
-      - name: Copy Latest Gatling Report
+      - name: Copy Latest Gatling Report Preserving Folder
         run: |
           set -e
+          mkdir -p committed-reports
           REPORT_DIR=$(find reports -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1)
           if [ -z "$REPORT_DIR" ]; then
-            echo "❌ No Gatling report directory found in /reports"
+            echo "❌ No report found in /reports"
             exit 1
           fi
-          echo "✅ Found report at $REPORT_DIR"
-          mkdir -p public
-          cp -r "$REPORT_DIR"/* public/
+          echo "✅ Found report: $REPORT_DIR"
+          BASENAME=$(basename "$REPORT_DIR")
+          cp -r "$REPORT_DIR" "committed-reports/$BASENAME"
 
-      - name: Publish to gh-pages
+      - name: Commit Full Report Folder to Main
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git clone --depth=1 --branch=gh-pages https://x-access-token:${{ secrets.GATLING_API_TOKEN }}@github.com/${{ github.repository }}.git gh-pages
-          cd gh-pages
-          rm -rf ./*
-          cp -r ../public/* .
-          touch .nojekyll
-          git add .
-          git commit -m "🚀 Publish Gatling report to GitHub Pages [CI]" || echo "Nothing to commit"
-          git push origin gh-pages
+          git add committed-reports/** -f
+          git commit -m "📊 Add Gatling report: $BASENAME [CI]" || echo "Nothing to commit"
+          git push https://x-access-token:${{ secrets.GATLING_API_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
