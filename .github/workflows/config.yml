@@ -6,9 +6,6 @@ on:
   pull_request:
     branches: [ "main" ]
 
-permissions:
-  contents: write
-
 jobs:
   gatling:
     runs-on: ubuntu-latest
@@ -62,3 +59,11 @@ jobs:
         with:
           name: gatling-report
           path: gatling-report.zip
+
+      - name: Deploy to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./reports
+          publish_branch: gh-pages
