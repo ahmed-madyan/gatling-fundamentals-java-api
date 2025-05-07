@@ -55,7 +55,7 @@ jobs:
 
       - name: Upload Gatling Report Artifact
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: gatling-report
           path: gatling-report.zip
