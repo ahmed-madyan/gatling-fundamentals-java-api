@@ -2,9 +2,9 @@ name: Gatling Load Test
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "gh-pages" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "gh-pages" ]
 
 jobs:
   gatling:
