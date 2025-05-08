@@ -69,7 +69,7 @@ public class AuthDummyJSON extends Simulation {
     //  - Ramp-up: gradually adds 20 users over 10 seconds
     private final PopulationBuilder population = new SimulationFactory(scn, httpProtocolFactory)
             .injectOpen(
-                    LoadProfileFactory.spike(1),
+                    LoadProfileFactory.spike(1)
 //                    LoadProfileFactory.rampUp(20, 10)
             )
             .build();
