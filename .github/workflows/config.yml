@@ -27,7 +27,7 @@ jobs:
       - name: Run Gatling Simulation
         run: |
           chmod +x ./mvnw
-          ./mvnw clean test-compile gatling:test -Dgatling.simulationClass=simulations.AuthDummyJSON
+          ./mvnw clean test-compile gatling:test -Dgatling.simulationClass=simulations.Basics
 
       - name: Debug - List contents of reports/
         run: |
