@@ -21,6 +21,7 @@ public class AuthDummyJSON extends Simulation {
     // Loads the login request payload from a JSON file at runtime.
     private final String loginPayload = readJsonFromFile("src/test/resources/data/loginPayload.json");
 
+
     private String readJsonFromFile(String path) {
         try {
             return new String(Files.readAllBytes(Paths.get(path)));
@@ -76,12 +77,6 @@ public class AuthDummyJSON extends Simulation {
     // === Simulation Lifecycle ===
     // Configures and launches the Gatling simulation using the prepared scenario and load profile.
     {
-        try {
-            LOGGER.info("Executing simulation setup for: Auth Workflow");
-            LOGGER.info("Simulation setup completed successfully.");
-        } catch (Exception e) {
-            LOGGER.severe("Simulation setup failed: " + e.getMessage());
-            throw e;
-        }
+        setUp(PopulationFactory.with(population));
     }
 }
