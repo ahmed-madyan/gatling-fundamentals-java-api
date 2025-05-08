@@ -31,7 +31,7 @@ public class AuthExample extends Simulation {
     // Authenticated request using the saved token
     private final ChainBuilder getProfile = new ChainBuilderFactory("Get Profile")
             .get("/profile")
-            .withHeader("Authorization", "Bearer #{accessToken}")  // Uses the saved token
+            .withHeader("Authorization", "Bearer ${accessToken}")  // Uses the saved token
             .withCheck(status().is(200))
             .build();
 

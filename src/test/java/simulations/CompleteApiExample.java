@@ -42,7 +42,7 @@ public class CompleteApiExample extends Simulation {
                         "role": "user"
                     }
                     """)
-            .withHeader("Authorization", "Bearer #{accessToken}")
+            .withHeader("Authorization", "Bearer ${accessToken}")
             .withCheck(status().is(201))
             .saveAs("$.id", "userId")
             .build();
@@ -50,7 +50,7 @@ public class CompleteApiExample extends Simulation {
     // Get User Details
     private final ChainBuilder getUser = new ChainBuilderFactory("Get User")
             .get("/users/#{userId}")
-            .withHeader("Authorization", "Bearer #{accessToken}")
+            .withHeader("Authorization", "Bearer ${accessToken}")
             .withCheck(status().is(200))
             .withCheck(jsonPath("$.name").is("John Doe"))
             .build();
@@ -64,14 +64,14 @@ public class CompleteApiExample extends Simulation {
                         "email": "john.updated@example.com"
                     }
                     """)
-            .withHeader("Authorization", "Bearer #{accessToken}")
+            .withHeader("Authorization", "Bearer ${accessToken}")
             .withCheck(status().is(200))
             .build();
 
     // Delete User
     private final ChainBuilder deleteUser = new ChainBuilderFactory("Delete User")
             .delete("/users/#{userId}")
-            .withHeader("Authorization", "Bearer #{accessToken}")
+            .withHeader("Authorization", "Bearer ${accessToken}")
             .withCheck(status().is(204))
             .build();
 
@@ -79,7 +79,7 @@ public class CompleteApiExample extends Simulation {
     // Get Products with Query Parameters
     private final ChainBuilder getProducts = new ChainBuilderFactory("Get Products")
             .get("/products")
-            .withHeader("Authorization", "Bearer #{accessToken}")
+            .withHeader("Authorization", "Bearer ${accessToken}")
             .withHeaders(Map.of(
                 "X-Page", "1",
                 "X-Size", "10"
@@ -98,7 +98,7 @@ public class CompleteApiExample extends Simulation {
                         "category": "electronics"
                     }
                     """)
-            .withHeader("Authorization", "Bearer #{accessToken}")
+            .withHeader("Authorization", "Bearer ${accessToken}")
             .withCheck(status().is(201))
             .build();
 
@@ -112,7 +112,7 @@ public class CompleteApiExample extends Simulation {
                         "quantity": 1
                     }
                     """)
-            .withHeader("Authorization", "Bearer #{accessToken}")
+            .withHeader("Authorization", "Bearer ${accessToken}")
             .withCheck(status().is(201))
             .saveAs("$.orderId", "orderId")
             .build();
@@ -120,7 +120,7 @@ public class CompleteApiExample extends Simulation {
     // Get Order Status
     private final ChainBuilder getOrderStatus = new ChainBuilderFactory("Get Order Status")
             .get("/orders/#{orderId}/status")
-            .withHeader("Authorization", "Bearer #{accessToken}")
+            .withHeader("Authorization", "Bearer ${accessToken}")
             .withCheck(status().is(200))
             .build();
 
