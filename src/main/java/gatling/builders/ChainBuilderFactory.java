@@ -115,7 +115,28 @@ public class ChainBuilderFactory {
      * @return this instance for fluent API
      */
     public ChainBuilderFactory saveAs(String jsonPath, String sessionKey) {
-        this.checks.add(jsonPath(jsonPath).saveAs(sessionKey));
+        this.checks.add(
+            jsonPath(jsonPath)
+                .exists()
+                .saveAs(sessionKey)
+        );
+        return this;
+    }
+
+    /**
+     * Saves a value from a JSON path to a session variable with validation.
+     *
+     * @param jsonPath The JSON path expression
+     * @param sessionKey The key to save the value as in the session
+     * @param expectedValue The expected value to validate against
+     * @return this instance for fluent API
+     */
+    public ChainBuilderFactory saveAs(String jsonPath, String sessionKey, String expectedValue) {
+        this.checks.add(
+            jsonPath(jsonPath)
+                .is(expectedValue)
+                .saveAs(sessionKey)
+        );
         return this;
     }
 
