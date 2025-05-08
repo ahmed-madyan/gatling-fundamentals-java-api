@@ -1,6 +1,8 @@
 package simulations;
 
+import gatling.builders.ChainBuilderFactory;
 import gatling.enums.BaseURI;
+import gatling.enums.HttpMethod;
 import gatling.utils.*;
 import io.gatling.javaapi.core.*;
 import io.gatling.javaapi.http.*;
@@ -39,15 +41,10 @@ public class AuthDummyJSON extends Simulation {
     // === Define Request Chains ===
 
     // Performs login and extracts the access token from the response body.
-    private final ChainBuilder loginAndExtractToken = exec(
-            http("Login Request")
-                    .post("/auth/login")
-                    .body(StringBody(loginPayload))
-                    .check(
-                            status().is(200),
-                            jsonPath("$.accessToken").saveAs("accessToken")
-                    )
-    );
+    private final ChainBuilder loginAndExtractToken = new ChainBuilderFactory("Login Request").request(HttpMethod.GET, "/auth/login")
+            .withBody(StringBody(loginPayload))
+            .saveAs("$.accessToken", "accessToken")
+            .build();
 
     // Makes an authenticated request using the access token to fetch user info.
     private final ChainBuilder getAuthUser = exec(
