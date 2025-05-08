@@ -47,7 +47,7 @@ public class AuthDummyJSON extends Simulation {
 //            .build();
 
     private final ChainBuilder loginAndExtractToken = exec(
-            http("Get Auth User")
+            http("Loing User")
                     .post("/auth/login")
                     .body(StringBody(loginPayload))
                     .check(jsonPath("$.accessToken").saveAs("accessToken"))
