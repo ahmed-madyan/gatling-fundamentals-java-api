@@ -41,10 +41,17 @@ public class AuthDummyJSON extends Simulation {
     // === Define Request Chains ===
 
     // Performs login and extracts the access token from the response body.
-    private final ChainBuilder loginAndExtractToken = new ChainBuilderFactory("Login Request").request(HttpMethod.POST, "/auth/login")
-            .withBody(StringBody(loginPayload))
-            .withCheck(jsonPath("$.accessToken").saveAs("accessToken"))
-            .build();
+//    private final ChainBuilder loginAndExtractToken = new ChainBuilderFactory("Login Request").request(HttpMethod.POST, "/auth/login")
+//            .withBody(StringBody(loginPayload))
+//            .withCheck(jsonPath("$.accessToken").saveAs("accessToken"))
+//            .build();
+
+    private final ChainBuilder loginAndExtractToken = exec(
+            http("Get Auth User")
+                    .post("/auth/login")
+                    .body(StringBody(loginPayload))
+                    .check(jsonPath("$.accessToken").saveAs("accessToken"))
+    );
 
     // Makes an authenticated request using the access token to fetch user info.
     private final ChainBuilder getAuthUser = exec(
