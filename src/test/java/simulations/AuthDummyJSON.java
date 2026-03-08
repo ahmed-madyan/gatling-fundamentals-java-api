@@ -76,7 +76,8 @@ public class AuthDummyJSON extends Simulation {
     private final PopulationBuilder population = new SimulationFactory(scn, httpProtocolFactory)
             .injectOpen(
                     LoadProfileFactory.spike(1)
-//                    ,LoadProfileFactory.rampUp(20, 10)
+                    ,LoadProfileFactory.rampUp(20, 10)
+                    ,LoadProfileFactory.steadyUsers(20,120)
             )
             .build();
 
