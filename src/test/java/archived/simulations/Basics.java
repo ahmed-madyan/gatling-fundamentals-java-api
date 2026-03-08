@@ -1,4 +1,4 @@
-package simulations;
+package archived.simulations;
 
 import gatling.enums.BasePath;
 import gatling.enums.BaseURI;

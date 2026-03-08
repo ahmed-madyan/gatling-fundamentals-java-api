@@ -1,4 +1,4 @@
-package videogamedb;
+package archived.videogamedb;
 
 import java.time.Duration;
 import java.util.*;

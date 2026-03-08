@@ -1,21 +1,17 @@
-package simulations;
+package archived.simulations;
 
 import gatling.enums.BaseURI;
 import gatling.utils.*;
-import io.gatling.javaapi.core.ChainBuilder;
-import io.gatling.javaapi.core.PopulationBuilder;
-import io.gatling.javaapi.core.ScenarioBuilder;
-import io.gatling.javaapi.core.Simulation;
-import io.gatling.javaapi.http.HttpProtocolBuilder;
+import io.gatling.javaapi.core.*;
+import io.gatling.javaapi.http.*;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.io.IOException;
 import java.util.logging.Logger;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
-import static io.gatling.javaapi.http.HttpDsl.http;
-import static io.gatling.javaapi.http.HttpDsl.status;
+import static io.gatling.javaapi.http.HttpDsl.*;
 
 public class AuthDummyJSON extends Simulation {
 
@@ -50,16 +46,16 @@ public class AuthDummyJSON extends Simulation {
 
     private final ChainBuilder loginAndExtractToken = exec(
             http("Loing User")
-                    .post("/user/login")
+                    .post("/auth/login")
                     .body(StringBody(loginPayload))
-//                    .check(jsonPath("$.accessToken").saveAs("accessToken"))
+                    .check(jsonPath("$.accessToken").saveAs("accessToken"))
     );
 
     // Makes an authenticated request using the access token to fetch user info.
     private final ChainBuilder getAuthUser = exec(
             http("Get Auth User")
-                    .get("/user/me")
-//                    .header("Authorization", "Bearer ${accessToken}")
+                    .get("/auth/me")
+                    .header("Authorization", "Bearer ${accessToken}")
                     .check(status().is(200))
     );
 
@@ -76,7 +72,7 @@ public class AuthDummyJSON extends Simulation {
     private final PopulationBuilder population = new SimulationFactory(scn, httpProtocolFactory)
             .injectOpen(
                     LoadProfileFactory.spike(1)
-//                    ,LoadProfileFactory.rampUp(20, 10)
+//                    LoadProfileFactory.rampUp(20, 10)
             )
             .build();
 

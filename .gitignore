@@ -2,3 +2,5 @@
 /.mvn/wrapper/*.jar
 /.idea
 /build
+/reports/
+*.log

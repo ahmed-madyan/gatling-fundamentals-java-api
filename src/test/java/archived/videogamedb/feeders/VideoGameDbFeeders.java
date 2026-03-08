@@ -1,4 +1,4 @@
-package videogamedb.feeders;
+package archived.videogamedb.feeders;
 
 import io.gatling.javaapi.core.*;
 import io.gatling.javaapi.http.*;

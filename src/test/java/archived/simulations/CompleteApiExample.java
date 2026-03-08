@@ -1,4 +1,4 @@
-package simulations;
+package archived.simulations;
 
 import gatling.builders.ChainBuilderFactory;
 import gatling.enums.HttpMethod;

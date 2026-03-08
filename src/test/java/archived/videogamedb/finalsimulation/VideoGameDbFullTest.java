@@ -1,4 +1,4 @@
-package videogamedb.finalsimulation;
+package archived.videogamedb.finalsimulation;
 
 import io.gatling.javaapi.core.*;
 import io.gatling.javaapi.http.*;
